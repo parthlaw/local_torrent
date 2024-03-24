@@ -11,13 +11,18 @@ import java.nio.charset.StandardCharsets;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import org.local_torrent.queues.TaskQueue;
+
 import java.util.Iterator;
 import com.google.gson.Gson;
 public class SocketServer {
   ExecutorService pool;
+  TaskQueue taskQueue;
   protected static final int MAX_T=5;
-  public SocketServer(){
+  public SocketServer(TaskQueue taskQueue){
     this.pool = Executors.newFixedThreadPool(MAX_T);
+    this.taskQueue = taskQueue;
   }
   public void run(){
     try{
@@ -43,7 +48,7 @@ public class SocketServer {
             ServerSocketChannel server = (ServerSocketChannel) key.channel();
             SocketChannel client = server.accept();
             client.configureBlocking(false);
-            SelectionKey clientKey = client.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE); // Register for both read and write
+            SelectionKey clientKey = client.register(selector, SelectionKey.OP_READ); // Register for both read and write
             clientKey.attach(new StringBuilder());
             continue;
           }
@@ -64,6 +69,7 @@ public class SocketServer {
               byte[] receivedBytes = new byte[buffer.remaining()];
               buffer.get(receivedBytes);
               System.out.println(receivedBytes.length);
+              key.interestOpsOr(SelectionKey.OP_WRITE);
               readMessageHandler(receivedBytes,key);
               System.out.println("Received Message");
               System.out.println(buffer);
