@@ -1,7 +1,5 @@
 package org.local_torrent.socket;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
@@ -10,15 +8,18 @@ import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.Set;
+
 public class SocketClient {
   String ip;
   int port;
-  public SocketClient(String ip, int port){
+
+  public SocketClient(String ip, int port) {
     this.ip = ip;
     this.port = port;
   }
-  public void run(){
-    try{
+
+  public void run() {
+    try {
       InetSocketAddress hostAddress = new InetSocketAddress(this.ip, this.port);
       SocketChannel client = SocketChannel.open();
       client.configureBlocking(false);
@@ -26,15 +27,15 @@ public class SocketClient {
       Selector selector = Selector.open();
       client.register(selector, SelectionKey.OP_CONNECT);
       System.out.println("Client... started");
-      while(true){
-      int readyChannels = selector.select();
-      if (readyChannels == 0) {
+      while (true) {
+        int readyChannels = selector.select();
+        if (readyChannels == 0) {
           continue;
-      }
+        }
 
-      Set<SelectionKey> selectedKeys = selector.selectedKeys();
-      Iterator<SelectionKey> keyIterator = selectedKeys.iterator();
-      while(keyIterator.hasNext()){
+        Set<SelectionKey> selectedKeys = selector.selectedKeys();
+        Iterator<SelectionKey> keyIterator = selectedKeys.iterator();
+        while (keyIterator.hasNext()) {
           SelectionKey key = keyIterator.next();
           keyIterator.remove();
           if (key.isConnectable()) {
@@ -43,37 +44,37 @@ public class SocketClient {
             if (socketChannel.isConnectionPending()) {
               socketChannel.finishConnect();
             }
-            socketChannel.register(selector,SelectionKey.OP_READ);
+            socketChannel.register(selector, SelectionKey.OP_READ);
             key.interestOps(key.interestOps() | SelectionKey.OP_WRITE);
           }
-          if(key.isReadable()){
+          if (key.isReadable()) {
             SocketChannel socketChannel = (SocketChannel) key.channel();
             int BUFFER_SIZE = 1024;
             ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
-            try{
+            try {
               int bytesRead = socketChannel.read(buffer);
               if (bytesRead == -1) {
                 System.out.println("Connection close");
-                  // Connection closed by client
-                  key.cancel();
-                  socketChannel.close();
-                  continue;
+                // Connection closed by client
+                key.cancel();
+                socketChannel.close();
+                continue;
               }
               buffer.flip();
               byte[] receivedBytes = new byte[buffer.remaining()];
               buffer.get(receivedBytes);
-              System.out.println(new String(receivedBytes,StandardCharsets.UTF_8));
+              System.out.println(new String(receivedBytes, StandardCharsets.UTF_8));
               System.out.println("Received Message");
               System.out.println(buffer);
-              
-        }catch(Exception e){
-            e.printStackTrace();
-            continue;
+
+            } catch (Exception e) {
+              e.printStackTrace();
+              continue;
             }
           }
         }
       }
-  }catch(Exception e){
+    } catch (Exception e) {
       e.printStackTrace();
     }
   }

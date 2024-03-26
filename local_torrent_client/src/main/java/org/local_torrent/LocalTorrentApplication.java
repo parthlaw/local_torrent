@@ -2,7 +2,6 @@ package org.local_torrent;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 import org.local_torrent.queues.TaskQueue;
 import org.local_torrent.socket.SocketServer;
 import org.springframework.boot.SpringApplication;
@@ -18,21 +17,23 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 @SpringBootApplication
 @Controller
 @EnableWebSocket
-public class LocalTorrentApplication{
-	public static void main(String[] args) {
-		ConfigurableApplicationContext context = SpringApplication.run(LocalTorrentApplication.class, args);
+public class LocalTorrentApplication {
+  public static void main(String[] args) {
+    ConfigurableApplicationContext context =
+        SpringApplication.run(LocalTorrentApplication.class, args);
     SocketServer socketServer = context.getBean(SocketServer.class);
     ExecutorService executorService = Executors.newSingleThreadExecutor();
     executorService.submit(socketServer::run);
-	}
+  }
 
   @GetMapping("/hello")
   @ResponseBody
-  public String hello(@RequestParam(value="name",defaultValue = "World") String name){
+  public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
     return String.format("Hello %s !", name);
   }
+
   @Bean
-  public TaskQueue taskQueue(){
+  public TaskQueue taskQueue() {
     return new TaskQueue();
   }
 }
