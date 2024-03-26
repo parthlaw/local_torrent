@@ -1,6 +1,7 @@
 package org.local_torrent.queues;
 public enum TaskType {
-    GET_FILE("GET_FILE");
+    GET_FILE("GET_FILE"),
+    CONNECT("CONNECT");
 
     private final String text;
 

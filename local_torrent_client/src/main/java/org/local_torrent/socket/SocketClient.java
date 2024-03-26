@@ -11,9 +11,15 @@ import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.Set;
 public class SocketClient {
+  String ip;
+  int port;
+  public SocketClient(String ip, int port){
+    this.ip = ip;
+    this.port = port;
+  }
   public void run(){
     try{
-      InetSocketAddress hostAddress = new InetSocketAddress("localhost", 8000);
+      InetSocketAddress hostAddress = new InetSocketAddress(this.ip, this.port);
       SocketChannel client = SocketChannel.open();
       client.configureBlocking(false);
       client.connect(hostAddress);
