@@ -1,7 +1,7 @@
 <br/>
 <p align="center">
   <a href="https://github.com/parthlaw/ReadME-Generator">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="https://github.com/parthlaw/local_torrent/assets/56805405/d9d78d74-d0cb-4ff0-bfa9-e183eec90bd3" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Local Torrent</h3>
@@ -20,7 +20,6 @@
     <a href="https://github.com/parthlaw/ReadME-Generator/issues">Request Feature</a> -->
   </p>
 </p>
-
 
 ## Table Of Contents
 
