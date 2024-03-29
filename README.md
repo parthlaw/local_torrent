@@ -35,7 +35,7 @@
 
 ## About The Project
 
-![Screen Shot](images/screenshot.png)
+![Screen Shot](https://github.com/parthlaw/local_torrent/assets/56805405/8afe7a26-e0d7-4094-87a2-deec61c5a0eb)
 
 Experience seamless file sharing within your local network with our innovative torrent application. Simply install the client application to join the network and start sharing files securely. This application ensures encrypted peer-to-peer connections, guaranteeing your privacy and confidentiality throughout your file-sharing experience. Say goodbye to concerns about unauthorized access – your communications are shielded from prying eyes, giving you peace of mind while you share files effortlessly.
 
