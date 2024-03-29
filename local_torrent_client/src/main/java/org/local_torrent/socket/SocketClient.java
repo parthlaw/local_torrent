@@ -8,14 +8,21 @@ import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class SocketClient {
   String ip;
   int port;
-
+  LinkedBlockingQueue responseQueue;
   public SocketClient(String ip, int port) {
     this.ip = ip;
     this.port = port;
+  }
+
+  public SocketClient(String ip, int port, LinkedBlockingQueue queue) {
+    this.ip = ip;
+    this.port = port;
+    this.responseQueue = queue;
   }
 
   public void run() {

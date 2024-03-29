@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
-
 @SpringBootApplication
 @Controller
 @EnableWebSocket
@@ -22,7 +21,7 @@ public class LocalTorrentApplication {
     ConfigurableApplicationContext context =
         SpringApplication.run(LocalTorrentApplication.class, args);
     SocketServer socketServer = context.getBean(SocketServer.class);
-    ExecutorService executorService = Executors.newSingleThreadExecutor();
+    ExecutorService executorService = Executors.newFixedThreadPool(2);
     executorService.submit(socketServer::run);
   }
 

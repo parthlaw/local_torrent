@@ -1,7 +1,8 @@
 package org.local_torrent.store;
 
 enum PropertyEnum {
-  BASEPATH("basePath");
+  BASEPATH("basePath"),
+  SERVERIP("serverIp");
 
   // Private field to store the associated string value
   private final String value;

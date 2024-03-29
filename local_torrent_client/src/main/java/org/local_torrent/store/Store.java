@@ -45,4 +45,7 @@ public class Store {
   public String getBasePath() {
     return this.config.getProperty(PropertyEnum.BASEPATH.getValue());
   }
+  public String getServerIp() {
+    return this.config.getProperty(PropertyEnum.SERVERIP.getValue());
+  }
 }
