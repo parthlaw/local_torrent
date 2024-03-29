@@ -10,18 +10,17 @@
     A local file sharing application which runs on a local area network (LAN).
     <br/>
     <br/>
-    <a href="https://github.com/parthlaw/ReadME-Generator"><strong>Explore the docs »</strong></a>
+<!--     <a href="https://github.com/parthlaw/ReadME-Generator"><strong>Explore the docs »</strong></a> -->
     <br/>
     <br/>
-    <a href="https://github.com/parthlaw/ReadME-Generator">View Demo</a>
+<!--     <a href="https://github.com/parthlaw/ReadME-Generator">View Demo</a>
     .
     <a href="https://github.com/parthlaw/ReadME-Generator/issues">Report Bug</a>
     .
-    <a href="https://github.com/parthlaw/ReadME-Generator/issues">Request Feature</a>
+    <a href="https://github.com/parthlaw/ReadME-Generator/issues">Request Feature</a> -->
   </p>
 </p>
 
-![Downloads](https://img.shields.io/github/downloads/parthlaw/ReadME-Generator/total) ![Contributors](https://img.shields.io/github/contributors/parthlaw/ReadME-Generator?color=dark-green) ![Issues](https://img.shields.io/github/issues/parthlaw/ReadME-Generator) ![License](https://img.shields.io/github/license/parthlaw/ReadME-Generator) 
 
 ## Table Of Contents
 
