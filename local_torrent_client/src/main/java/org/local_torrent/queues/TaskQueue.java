@@ -55,8 +55,9 @@ public class TaskQueue {
     }
   }
 
-  public void addTopic(String topic) {
+  public LinkedBlockingQueue<Task> addTopic(String topic) {
     this.topicQueues.put(topic, new LinkedBlockingQueue<Task>());
+    return this.topicQueues.get(topic);
   }
 
   public void removeTopic(String topic) throws KeyNotExistException {

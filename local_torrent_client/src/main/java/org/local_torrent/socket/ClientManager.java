@@ -1,43 +1,49 @@
 package org.local_torrent.socket;
 
-import com.google.gson.Gson;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import org.local_torrent.exceptions.KeyNotExistException;
 import org.local_torrent.queues.Task;
 import org.local_torrent.queues.TaskQueue;
+import org.local_torrent.queues.TaskType;
+import org.local_torrent.store.Store;
 
 public class ClientManager {
   TaskQueue queue;
+  Store store;
 
-  public ClientManager(TaskQueue queue) {
-    this.queue = queue;
-  }
-
-  public void run() {
-    while (true) {
-      Task task = this.queue.getTask();
-      if (task == null) {
-        continue;
-      }
-      switch (task.type()) {
-        case GET_FILE:
-          break;
-        case CONNECT:
-          String jsonMessage = task.message();
-          Gson gson = new Gson();
-          JsonTaskMessages.JsonConnectMessage connectMessage =
-              gson.fromJson(jsonMessage, JsonTaskMessages.JsonConnectMessage.class);
-          this.handleConnect(connectMessage.ip(), connectMessage.port());
-          break;
-        default:
-          break;
+  public ClientManager(Store store) {
+    TaskQueue taskQueue = new TaskQueue();
+    this.queue = taskQueue;
+    this.store = store;
+    LinkedBlockingQueue<Task> netServerQueue = this.queue.addTopic("server");
+    if (!store.getServerIp().isEmpty()) {
+      try {
+        netServerQueue.put(new Task(TaskType.CONNECT, store.getServerIp()));
+      } catch (InterruptedException e) {
+        store.setConnectionStatus(false);
+        e.printStackTrace();
       }
     }
   }
 
-  private void handleConnect(String ip, int port) {
+  public void connectToServer(String ip, int port) {
     ExecutorService executorService = Executors.newSingleThreadExecutor();
-    SocketClient socketClient = new SocketClient(ip, port);
+    LinkedBlockingQueue<Task> queue = this.queue.addTopic(ip);
+    SocketClient socketClient = new SocketClient(ip, port, queue);
     executorService.submit(socketClient::run);
   }
+
+  public void disconnectFromServer(String ip) {
+    try {
+      this.queue.addTask(new Task(TaskType.DISCONNECT, ip), ip);
+    } catch (KeyNotExistException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void getConnectedClients() {}
+
+  public void getFiles() {}
 }
