@@ -20,7 +20,8 @@
     <a href="https://github.com/parthlaw/ReadME-Generator/issues">Request Feature</a> -->
   </p>
 </p>
-![Issues](https://img.shields.io/github/issues/parthlaw/local_torrent) 
+![Issues](https://img.shields.io/github/issues/parthlaw/local_torrent)
+
 ## Table Of Contents
 
 * [About the Project](#about-the-project)
