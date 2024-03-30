@@ -9,20 +9,17 @@ import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
+import org.local_torrent.queues.Task;
 
 public class SocketClient {
   String ip;
   int port;
-  LinkedBlockingQueue responseQueue;
-  public SocketClient(String ip, int port) {
-    this.ip = ip;
-    this.port = port;
-  }
+  LinkedBlockingQueue<Task> requestQueue;
 
-  public SocketClient(String ip, int port, LinkedBlockingQueue queue) {
+  public SocketClient(String ip, int port, LinkedBlockingQueue<Task> queue) {
     this.ip = ip;
     this.port = port;
-    this.responseQueue = queue;
+    this.requestQueue = queue;
   }
 
   public void run() {

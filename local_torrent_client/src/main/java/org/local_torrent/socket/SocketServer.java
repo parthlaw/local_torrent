@@ -14,16 +14,13 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import org.local_torrent.queues.TaskQueue;
 
 public class SocketServer {
   ExecutorService pool;
-  TaskQueue taskQueue;
   protected static final int MAX_T = 5;
 
-  public SocketServer(TaskQueue taskQueue) {
+  public SocketServer() {
     this.pool = Executors.newFixedThreadPool(MAX_T);
-    this.taskQueue = taskQueue;
   }
 
   public void run() {

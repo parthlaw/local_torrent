@@ -2,8 +2,9 @@ package org.local_torrent;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import org.local_torrent.queues.TaskQueue;
+import org.local_torrent.socket.ClientManager;
 import org.local_torrent.socket.SocketServer;
+import org.local_torrent.store.Store;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
+
 @SpringBootApplication
 @Controller
 @EnableWebSocket
@@ -21,7 +23,7 @@ public class LocalTorrentApplication {
     ConfigurableApplicationContext context =
         SpringApplication.run(LocalTorrentApplication.class, args);
     SocketServer socketServer = context.getBean(SocketServer.class);
-    ExecutorService executorService = Executors.newFixedThreadPool(2);
+    ExecutorService executorService = Executors.newSingleThreadExecutor();
     executorService.submit(socketServer::run);
   }
 
@@ -32,7 +34,12 @@ public class LocalTorrentApplication {
   }
 
   @Bean
-  public TaskQueue taskQueue() {
-    return new TaskQueue();
+  public Store store() {
+    return new Store();
+  }
+
+  @Bean
+  public ClientManager clientManager(Store store) {
+    return new ClientManager(store);
   }
 }

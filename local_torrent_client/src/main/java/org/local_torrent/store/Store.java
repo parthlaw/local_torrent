@@ -9,12 +9,14 @@ import java.util.Properties;
 public class Store {
   private Properties config;
   private String propertiesFile = "/home/parth/.config/local_torrent.properties";
+  private Boolean connectionStatus;
 
   public Store() {
     this.config = new Properties();
     try {
       FileInputStream fileInputStream = new FileInputStream(propertiesFile);
       this.config.load(fileInputStream);
+      this.connectionStatus = false;
     } catch (Exception e) {
       System.out.println("Properties file not found");
       setPropertyValue(PropertyEnum.BASEPATH.getValue(), "/home/local_torrent/");
@@ -45,7 +47,20 @@ public class Store {
   public String getBasePath() {
     return this.config.getProperty(PropertyEnum.BASEPATH.getValue());
   }
+
   public String getServerIp() {
     return this.config.getProperty(PropertyEnum.SERVERIP.getValue());
+  }
+
+  public void setServerIp(String value) {
+    this.setPropertyValue(PropertyEnum.SERVERIP.getValue(), value);
+  }
+
+  public void setConnectionStatus(Boolean status) {
+    this.connectionStatus = status;
+  }
+
+  public Boolean getConnectionStatus() {
+    return this.connectionStatus;
   }
 }
