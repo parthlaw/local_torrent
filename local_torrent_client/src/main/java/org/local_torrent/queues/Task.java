@@ -1,3 +1,5 @@
 package org.local_torrent.queues;
 
-public record Task(TaskType type, String message) {}
+import java.util.concurrent.LinkedBlockingQueue;
+
+public record Task(TaskType type, String message, LinkedBlockingQueue<TaskResponse> responseQueue) {}

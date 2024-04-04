@@ -8,11 +8,11 @@ import org.local_torrent.exceptions.KeyNotExistException;
 public class TaskQueue {
   HashMap<String, LinkedBlockingQueue<Task>> topicQueues;
   LinkedBlockingQueue<Task> mainQueue;
-  HashMap<String, LinkedBlockingQueue<Task>> responseQueues;
+  HashMap<String, LinkedBlockingQueue<TaskResponse>> responseQueues;
 
   public TaskQueue() {}
 
-  private void checkKey(HashMap<String, LinkedBlockingQueue<Task>> hashMap, String key)
+  private<T> void checkKey(HashMap<String, LinkedBlockingQueue<T>> hashMap, String key)
       throws KeyNotExistException {
     if (!hashMap.containsKey(key)) {
       throw new KeyNotExistException("Key " + key + " not exists");
@@ -65,10 +65,10 @@ public class TaskQueue {
     this.topicQueues.remove(topic);
   }
 
-  public UUID getResponseQueueUUID() {
+  public LinkedBlockingQueue<TaskResponse> getResponseQueue() {
     UUID uuid = UUID.randomUUID();
-    responseQueues.put(uuid.toString(), new LinkedBlockingQueue<Task>());
-    return uuid;
+    responseQueues.put(uuid.toString(), new LinkedBlockingQueue<TaskResponse>());
+    return responseQueues.get(uuid.toString());
   }
 
   public void removeResponseQueue(UUID uuid) throws KeyNotExistException {
