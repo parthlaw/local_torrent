@@ -2,18 +2,22 @@ package org.local_torrent.queues;
 
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.LinkedBlockingQueue;
 import org.local_torrent.exceptions.KeyNotExistException;
 
 public class TaskQueue {
   HashMap<String, LinkedBlockingQueue<Task>> topicQueues;
   LinkedBlockingQueue<Task> mainQueue;
-  HashMap<String, LinkedBlockingQueue<TaskResponse>> responseQueues;
+  HashMap<String, LinkedBlockingDeque<TaskResponse>> responseQueues;
 
-  public TaskQueue() {}
+  public TaskQueue() {
+    this.topicQueues = new HashMap<>();
+    this.mainQueue = new LinkedBlockingQueue<>();
+    this.responseQueues = new HashMap<>();
+  }
 
-  private<T> void checkKey(HashMap<String, LinkedBlockingQueue<T>> hashMap, String key)
-      throws KeyNotExistException {
+  private <T> void checkKey(HashMap<String, T> hashMap, String key) throws KeyNotExistException {
     if (!hashMap.containsKey(key)) {
       throw new KeyNotExistException("Key " + key + " not exists");
     }
@@ -65,10 +69,14 @@ public class TaskQueue {
     this.topicQueues.remove(topic);
   }
 
-  public LinkedBlockingQueue<TaskResponse> getResponseQueue() {
+  public String getNewResponseQueueUUID() {
     UUID uuid = UUID.randomUUID();
-    responseQueues.put(uuid.toString(), new LinkedBlockingQueue<TaskResponse>());
-    return responseQueues.get(uuid.toString());
+    responseQueues.put(uuid.toString(), new LinkedBlockingDeque<TaskResponse>());
+    return uuid.toString();
+  }
+
+  public LinkedBlockingDeque<TaskResponse> getResponseQueue(String uuid) {
+    return responseQueues.get(uuid);
   }
 
   public void removeResponseQueue(UUID uuid) throws KeyNotExistException {

@@ -1,5 +1,6 @@
 package org.local_torrent.socket;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
@@ -8,8 +9,12 @@ import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.LinkedBlockingQueue;
 import org.local_torrent.queues.Task;
+import org.local_torrent.queues.TaskResponse;
+import org.local_torrent.queues.TaskStatus;
+import org.local_torrent.queues.TaskType;
 
 public class SocketClient {
   String ip;
@@ -22,7 +27,7 @@ public class SocketClient {
     this.requestQueue = queue;
   }
 
-  public void run() {
+  public void run(LinkedBlockingDeque<TaskResponse> queue) {
     try {
       InetSocketAddress hostAddress = new InetSocketAddress(this.ip, this.port);
       SocketChannel client = SocketChannel.open();
@@ -46,7 +51,14 @@ public class SocketClient {
             SocketChannel socketChannel = (SocketChannel) key.channel();
 
             if (socketChannel.isConnectionPending()) {
-              socketChannel.finishConnect();
+              queue.add(new TaskResponse(TaskType.CONNECT, TaskStatus.WAIT, "Connecting"));
+              boolean connectionStatus = socketChannel.finishConnect();
+              if (!connectionStatus) {
+                queue.add(new TaskResponse(TaskType.CONNECT, TaskStatus.FAIL, "Connection Fail"));
+                continue;
+              }
+              queue.add(
+                  new TaskResponse(TaskType.CONNECT, TaskStatus.SUCCESS, "Connection Success"));
             }
             socketChannel.register(selector, SelectionKey.OP_READ);
             key.interestOps(key.interestOps() | SelectionKey.OP_WRITE);
@@ -78,7 +90,8 @@ public class SocketClient {
           }
         }
       }
-    } catch (Exception e) {
+    } catch (IOException e) {
+      queue.add(new TaskResponse(TaskType.CONNECT, TaskStatus.FAIL, "Connection Exception"));
       e.printStackTrace();
     }
   }

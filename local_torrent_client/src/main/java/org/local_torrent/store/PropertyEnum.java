@@ -2,7 +2,12 @@ package org.local_torrent.store;
 
 enum PropertyEnum {
   BASEPATH("basePath"),
-  SERVERIP("serverIp");
+  SERVERIP("serverIp"),
+  SERVERPORT("serverPort"),
+  WEBPORT("webPort"),
+  NODEPORT("nodePort"),
+  SHAREDIR("shareDir"),
+  DOWNLOADDIR("downloadDir");
 
   // Private field to store the associated string value
   private final String value;
